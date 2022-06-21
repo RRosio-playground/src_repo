@@ -3,23 +3,25 @@ on:
   issues:
     types:
       - labeled
+    if: github.event.label == 'nbclassic'
 
 jobs:
-  test-action:
+  transfer-and-comment-action:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         router:
-          - dest_repo:dest_repo
+        # label_triggering_workflow:destination_repository_name
+          - nbclassic:dest_repo
     steps:
       - uses: actions/checkout@v3
-      - name: Transfer Issue & Comment
+      - name: Transfer Issue
         uses: lando/transfer-issue-action@v2.0.3
         id: transfer-issue
         with:
-          token: ${{ secrets.MOVE2 }}
-          # make a variable for src repo in string bellow 
-          apply_label: "Transferred from src_repo:009BBE"
+          token: ${{ secrets.MOVE2 }} 
+          # applied_label:color_of_applied_label
+          apply_label: `transferred issue:D5B795`
           router: ${{ matrix.router}}
           debug: true
       - name: Echo Output Data
@@ -27,7 +29,7 @@ jobs:
           echo "DESTINATION REPO: ${{steps.transfer-issue.outputs.destination_repo}}"
           echo "NEW ISSUE NUMBER: ${{steps.transfer-issue.outputs.new_issue_number}}"
           echo "NEW ISSUE URL: ${{steps.transfer-issue.outputs.new_issue_url}}"
-      - name: Update Transferred Issue
+      - name: Update Transferred Issue with Comment
         uses: actions/github-script@v6.1.0
         if: steps.transfer-issue.outputs.new_issue_number != ''
         with:
