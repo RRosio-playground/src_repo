@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ secrets.MOVE2 }} 
           # applied_label:color_of_applied_label
-          apply_label: `transferred_issue:D5B795`
+          apply_label: "transferred issue:D5B795"
           router: ${{ matrix.router}}
           debug: true
       - name: Echo Output Data
